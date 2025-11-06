@@ -13,8 +13,6 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import CheckBoxIcon from "../components/ui/CheckBoxIcon";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-// ---- 1. Navigation imports & typing ---------------------------------
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigations/RootNavigator";
