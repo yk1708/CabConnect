@@ -7,6 +7,7 @@ import {
   ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Button from "../../components/ui/Button";
 import { MapPin, Calendar, DollarSign, Info, Bell } from "lucide-react-native";
 import RecentRideItem from "../../components/RecentRideItem";
 
@@ -119,12 +120,8 @@ export default function PostRideScreen() {
                 </View>
               </View>
 
-              {/* Confirm Button */}
-              <TouchableOpacity className="bg-black rounded-full py-4 items-center">
-                <Text className="text-white font-semibold text-lg">
-                  Confirm
-                </Text>
-              </TouchableOpacity>
+            {/* Confirm Button */}
+            <Button title="Confirm" size="lg"/>
 
               {/* Guide Link */}
               <Text className="text-start text-sm text-gray-600 mt-4">
