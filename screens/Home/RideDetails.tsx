@@ -7,16 +7,28 @@ import {
   ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 import Button from "../../components/ui/Button";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../navigations/RootNavigator";
 import { MapPin, Calendar, DollarSign, Info, Bell } from "lucide-react-native";
 import RecentRideItem from "../../components/RecentRideItem";
 
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
 export default function PostRideScreen() {
+  const navigation = useNavigation<NavigationProp>();
+
   const [activeTab, setActiveTab] = useState("post");
   const [pickup, setPickup] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [fare, setFare] = useState("");
+
+
+  const handleNotificationScreen = () => {
+    navigation.navigate("Notification"); 
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
@@ -25,16 +37,18 @@ export default function PostRideScreen() {
         <View className="shadow-sm px-5 py-4 flex-row items-center justify-between">
           <Text className="text-2xl font-bold text-orange-500">RideZee</Text>
           <View className="relative">
-            <Bell size={24} color="#666" />
+            <TouchableOpacity onPress={handleNotificationScreen}>
+              <Bell size={24} color="#666" />
+            </TouchableOpacity> 
             <View className="absolute -top-1 -right-1 bg-red-500 rounded-full w-2 h-2" />
           </View>
         </View>
 
         {/* 🚘 Post Ride / Get Ride Toggle */}
-        <View className="flex-row bg-gray-100 rounded-full p-1 mx-5 mt-4">
+        <View className="flex-row bg-gray-100 rounded-xl p-2 mx-5 mt-4">
           <TouchableOpacity
             onPress={() => setActiveTab("post")}
-            className={`flex-1 rounded-full py-2 items-center ${
+            className={`flex-1 rounded-xl py-2 items-center ${
               activeTab === "post" ? "bg-white shadow-sm" : "bg-gray-100"
             }`}
           >
@@ -49,7 +63,7 @@ export default function PostRideScreen() {
 
           <TouchableOpacity
             onPress={() => setActiveTab("get")}
-            className={`flex-1 rounded-full py-2 items-center ${
+            className={`flex-1 rounded-xl py-2 items-center ${
               activeTab === "get" ? "bg-white shadow-sm" : "bg-gray-100"
             }`}
           >
@@ -69,7 +83,7 @@ export default function PostRideScreen() {
             // ======================== POST RIDE FORM ========================
             <View className="bg-white rounded-xl p-5 shadow-sm mb-5">
               {/* Pickup Place */}
-              <View className="flex-row items-center border border-gray-300 rounded-lg px-4 py-3 mb-4">
+              <View className="flex-row items-center border border-gray-300 rounded-lg px-4 py-2 mb-4">
                 <MapPin size={20} color="#666" className="mr-3" />
                 <TextInput
                   placeholder="Pickup Place"
@@ -84,7 +98,7 @@ export default function PostRideScreen() {
 
               {/* Dates */}
               <View className="flex-row gap-3 mb-4">
-                <View className="flex-1 flex-row items-center border border-gray-300 rounded-lg px-4 py-3">
+                <View className="flex-1 flex-row items-center border border-gray-300 rounded-lg px-4 py-2">
                   <Calendar size={20} color="#666" className="mr-3" />
                   <TextInput
                     placeholder="From Date"
@@ -93,7 +107,7 @@ export default function PostRideScreen() {
                     className="flex-1"
                   />
                 </View>
-                <View className="flex-1 flex-row items-center border border-gray-300 rounded-lg px-4 py-3">
+                <View className="flex-1 flex-row items-center border border-gray-300 rounded-lg px-4 py-2">
                   <Calendar size={20} color="#666" className="mr-3" />
                   <TextInput
                     placeholder="To Date"
@@ -105,7 +119,7 @@ export default function PostRideScreen() {
               </View>
 
               {/* Fare */}
-              <View className="flex-row items-center border border-gray-300 rounded-lg px-4 py-3 mb-5">
+              <View className="flex-row items-center border border-gray-300 rounded-lg px-4 py-2 mb-5">
                 <DollarSign size={20} color="#666" className="mr-3" />
                 <TextInput
                   placeholder="Fare"

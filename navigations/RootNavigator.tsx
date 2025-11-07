@@ -4,11 +4,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import TabNavigator from './TabNavigator';
+import NotificationScreen from '../screens/notification/NotificationScreen';
 
 export type RootStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
-  HomeTabs: undefined; // This will show the Tab Navigator
+  HomeTabs: undefined; 
+  Notification: undefined;
 };
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -19,6 +21,8 @@ const RootNavigator = () => {
       <Stack.Screen name="SignUp" component={SignUpScreen} /> */}
       {/* Main App - Tab Navigation */}
       <Stack.Screen name="HomeTabs" component={TabNavigator} />
+      <Stack.Screen name="Notification" component={NotificationScreen} />
+
     </Stack.Navigator>
   );
 };
