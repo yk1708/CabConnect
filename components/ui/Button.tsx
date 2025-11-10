@@ -1,5 +1,5 @@
 // src/components/Button.tsx
-import React from 'react';
+import React from "react";
 import {
   TouchableOpacity,
   Text,
@@ -9,10 +9,11 @@ import {
   StyleSheet,
   ViewStyle,
   TextStyle,
-} from 'react-native';
+  useColorScheme,
+} from "react-native";
 
-export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
-export type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
+export type ButtonSize = "sm" | "md" | "lg";
 
 export interface ButtonProps {
   /** Button label */
@@ -37,10 +38,13 @@ export interface ButtonProps {
   textStyle?: TextStyle;
 }
 
+/**
+ * Themed Button component — automatically adapts to Light/Dark mode.
+ */
 const Button: React.FC<ButtonProps> = ({
   title,
-  variant = 'primary',
-  size = 'md',
+  variant = "primary",
+  size = "md",
   loading = false,
   disabled = false,
   leftIcon,
@@ -49,13 +53,44 @@ const Button: React.FC<ButtonProps> = ({
   style,
   textStyle,
 }) => {
+  const theme = useColorScheme(); // 'light' | 'dark'
+  const isDark = theme === "dark";
+
+  // ── Theme colors ──
+  const colors = {
+    light: {
+      primaryBg: "#000000",
+      primaryText: "#ffffff",
+      secondaryBg: "#6b7280",
+      secondaryText: "#ffffff",
+      border: "#000000",
+      text: "#000000",
+    },
+    dark: {
+      primaryBg: "#ffffff",
+      primaryText: "#000000",
+      secondaryBg: "#9ca3af",
+      secondaryText: "#000000",
+      border: "#ffffff",
+      text: "#ffffff",
+    },
+  };
+
+  const palette = isDark ? colors.dark : colors.light;
   const isDisabled = disabled || loading;
 
   // ────── Container styles ──────
   const containerStyle = StyleSheet.flatten([
     styles.base,
-    styles[variant],
     styles[size],
+    variant === "primary" && { backgroundColor: palette.primaryBg },
+    variant === "secondary" && { backgroundColor: palette.secondaryBg },
+    variant === "outline" && {
+      backgroundColor: "transparent",
+      borderWidth: 1,
+      borderColor: palette.border,
+    },
+    variant === "ghost" && { backgroundColor: "transparent" },
     isDisabled && styles.disabled,
     style,
   ]);
@@ -63,8 +98,15 @@ const Button: React.FC<ButtonProps> = ({
   // ────── Text styles ──────
   const textStyleCombined = StyleSheet.flatten([
     styles.textBase,
-    styles[`${variant}Text`],
     styles[`${size}Text`],
+    {
+      color:
+        variant === "primary"
+          ? palette.primaryText
+          : variant === "secondary"
+          ? palette.secondaryText
+          : palette.text,
+    },
     isDisabled && styles.disabledText,
     textStyle,
   ]);
@@ -78,8 +120,12 @@ const Button: React.FC<ButtonProps> = ({
     >
       {loading ? (
         <ActivityIndicator
-          size={size === 'sm' ? 'small' : 'small'}
-          color={variant === 'primary' || variant === 'secondary' ? '#fff' : '#000'}
+          size={size === "sm" ? "small" : "small"}
+          color={
+            variant === "primary" || variant === "secondary"
+              ? palette.primaryText
+              : palette.text
+          }
         />
       ) : (
         <>
@@ -92,15 +138,11 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-/* -------------------------------------------------------------
-   StyleSheet – all styling lives here (no Tailwind)
-   ------------------------------------------------------------- */
 const styles = StyleSheet.create({
-  // Base
   base: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 999, // pill shape
   },
 
@@ -109,26 +151,11 @@ const styles = StyleSheet.create({
   md: { height: 48, paddingHorizontal: 24 },
   lg: { height: 56, paddingHorizontal: 32 },
 
-  // ── Variants ──
-  primary: { backgroundColor: '#000' },
-  secondary: { backgroundColor: '#6b7280' },
-  outline: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: '#000',
-  },
-  ghost: { backgroundColor: 'transparent' },
-
   // ── Text ──
   textBase: {
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: "600",
+    textAlign: "center",
   },
-  primaryText: { color: '#fff' },
-  secondaryText: { color: '#fff' },
-  outlineText: { color: '#000' },
-  ghostText: { color: '#000' },
-
   smText: { fontSize: 14 },
   mdText: { fontSize: 16 },
   lgText: { fontSize: 18 },
